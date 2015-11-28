@@ -15,6 +15,15 @@ def send(s,t):
 def get():
     ss=s.recv(1024)
     tv_get.insert(1.0,ss)
+    tv_get.insert(1.0,type(ss))
+
+def save():
+    ss_send=tv_send.get(1.0,END)
+    ss_get=tv_get.get(1.0,END)
+    f=open("C:\\Users\\steven\\Desktop\\test1.txt",'a')
+    f.write(ss_send)
+    f.write(ss_get)
+    f.close()
 
 if __name__ == '__main__':
 
@@ -39,6 +48,7 @@ if __name__ == '__main__':
     t=tv_send.get(1.0,END)
     Button(frm_l,text="send",command=lambda :send(s,t)).pack(side=TOP)
     Button(frm_l,text="get",command=lambda :get()).pack(side=TOP)
+    Button(frm_l,text="save all the text",command=lambda :save()).pack(side=TOP)
 
     tv_get=Text(frm_r)
     tv_get.insert(1.0,"<<<<")
@@ -50,4 +60,3 @@ if __name__ == '__main__':
     root.mainloop()
 
     s.close()
-

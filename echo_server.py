@@ -5,6 +5,7 @@
 'a server example which send hello to client.'
 
 import time, socket, threading
+import json
 from Tkinter import *
 
 # 保留sock的字典对象
@@ -23,11 +24,17 @@ def opensocket():
     s.listen(5)
     print 'Waiting for connection...'
     while True:
+        # todo
         # 接受一个新连接:
         sock, addr = s.accept()
+        ip_json=json.dumps(addr)
+        for i in sock_dict:
+            sock_dict[i].send(ip_json)
+
+            exist_ip=json.dumps(i)
+            sock.send(exist_ip)
         lb.insert(END,addr)
         sock_dict[addr]=sock
-        sock.send(addr)
         print sock_dict
         # 创建新线程来处理TCP连接:
         t = threading.Thread(target=tcplink, args=(sock, addr))
@@ -42,6 +49,18 @@ def tcplink(sock, addr):
     sock.send('Welcome!')
     while True:
         data = sock.recv(1024)
+        try:
+           data_json=json.loads(data)
+           print data_json
+           ip=(data_json[0],int(data_json[1]))
+           print ip
+           sock_sendto=sock_dict[ip]
+           print sock_sendto
+           sock_sendto.send(data_json[2])
+           print data_json[2]
+        except ValueError,e:
+            print data+" is not json"
+
         time.sleep(1)
         if data == 'exit' or not data:
             print ("exit")
@@ -88,6 +107,7 @@ if __name__ == '__main__':
     tv_send.insert(1.0,"init")
     tv_send.pack(side=TOP)
 
+    # 一个显示ip，一个显示端口
     var1=StringVar()
     var2=StringVar()
     e_ip=Entry(frm_r,textvariable=var1)
@@ -95,6 +115,7 @@ if __name__ == '__main__':
     e_ip.pack()
     e_port.pack()
 
+    # ip和端口一起显示
     var3=StringVar()
     e=Entry(frm_r,textvariable=var3)
     e.pack()

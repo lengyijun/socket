@@ -4,6 +4,7 @@
 'a socket example which send echo message to server.'
 
 import socket,threading
+import tkFileDialog
 import json
 from Tkinter import *
 
@@ -23,8 +24,9 @@ def send(s,t):
         tv_get.insert(1.0,ss)
 
 def get():
-    ss=s.recv(1024)
     try:
+        # todo
+        ss=s.recv(1024)
         ss_json=json.loads(ss)
         tv_get.insert(1.0,ss_json[0])
         tv_get.insert(1.0,ss_json[1])
@@ -47,13 +49,24 @@ def print_item(event):
     var1.set(ss[0])
     var2.set(ss[1])
 
+def sendfile():
+    filename=tkFileDialog.askopenfilename()
+    tv_send.insert(END,filename)
+    f=open(filename,'r')
+    while TRUE:
+        data=f.read(1024)
+        if not data:
+            break
+        tv_send.insert(END,data)
+    print filename
+
 if __name__ == '__main__':
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # 建立连接:
     s.connect(('127.0.0.1', 9999))
     # 接收欢迎消息:
-    print s.recv(1024)
+    # print s.recv(1024)
 
     # 以下为图形化编程
     root=Tk()
@@ -71,6 +84,7 @@ if __name__ == '__main__':
     Button(frm_l,text="send",command=lambda :send(s,t)).pack(side=TOP)
     Button(frm_l,text="get",command=lambda :get()).pack(side=TOP)
     Button(frm_l,text="save all the text",command=lambda :save()).pack(side=TOP)
+    Button(frm_l,text="choose a file",command=lambda :sendfile()).pack(side=TOP)
 
     tv_get=Text(frm_r)
     tv_get.insert(1.0,"<<<<")

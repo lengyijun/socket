@@ -10,6 +10,7 @@ from Tkinter import *
 
 # 保留sock的字典对象
 sock_dict={}
+
 # event这个参数不能忘记
 def print_item(event):
     ss=lb.get(lb.curselection()) # ss为元组类型，相当方便
@@ -29,10 +30,15 @@ def opensocket():
         sock, addr = s.accept()
         ip_json=json.dumps(addr)
         for i in sock_dict:
+            # 先给每一个已经上线的用户发送新用户上线的通知
             sock_dict[i].send(ip_json)
+            print "sending "+ip_json
 
+            # 再给新用户发送每一个已经上线的用户的消息
             exist_ip=json.dumps(i)
             sock.send(exist_ip)
+            print "sending "+exist_ip
+            time.sleep(1)
         lb.insert(END,addr)
         sock_dict[addr]=sock
         print sock_dict
@@ -46,7 +52,7 @@ def socket_thread():
 
 def tcplink(sock, addr):
     print 'Accept new connection from %s:%s...' % addr
-    sock.send('Welcome!')
+    # sock.send('Welcome!')
     while True:
         data = sock.recv(1024)
         try:

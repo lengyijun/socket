@@ -92,9 +92,9 @@ def refresh(s):
         lb.insert(END,str(item[0])+'/'+str(item[1]))
 
 def get_file_0():
-    f=open("torecv.png",'wb')
+    f=open("torecv.png",'ab')
     while True:
-        l=s.recv(1024).encode("ISO-8859-1")
+        l=s.recv(1024)
         while(l):
             print("receving")
             f.write(l)
@@ -102,7 +102,7 @@ def get_file_0():
         f.close()
 
 def get_file():
-    f=open("torecv.png",'wb')
+    f=open("torecv.png",'ab')
     try:
         ss=s.recv(1024)
         f.write(ss)

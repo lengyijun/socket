@@ -64,7 +64,7 @@ def tcplink(sock, addr):
             sock_sendto=sock_dict[ip]
             print sock_sendto
 
-            sock_sendto.send(data_json[2])
+            sock_sendto.send(data_json[2].encode("ISO-8859-1"))
             print data_json[2]
         except ValueError,e:
             # 客户端的刷新请求

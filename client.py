@@ -67,15 +67,17 @@ def print_item(event):
     var2.set(ss[1])
 
 def sendfile():
-    filename=tkFileDialog.askopenfilename()
-    tv_send.insert(END,filename)
-    f=open(filename,'r')
-    while TRUE:
-        data=f.read(1024)
-        if not data:
-            break
-        tv_send.insert(END,data)
-    print filename
+    # filename=tkFileDialog.askopenfilename()
+    f=open('tosend.png','rb')
+    l=f.read(512)
+    while (l):
+        print("sending")
+        addr=[e_ip.get(),e_port.get(),l.decode("ISO-8859-1")]
+        # addr=[e_ip.get(),e_port.get(),l.decode('latin-1')]
+        ip_json=json.dumps(addr)
+        s.send(ip_json)
+        l=f.read(256)
+    f.close()
 
 def refresh(s):
     s.send("refresh")
@@ -88,6 +90,32 @@ def refresh(s):
         #如果出现1/2，请再刷新一遍,原因不详
         tv_get.insert(END,"\n")
         lb.insert(END,str(item[0])+'/'+str(item[1]))
+
+def get_file_0():
+    f=open("torecv.png",'wb')
+    while True:
+        l=s.recv(1024).encode("ISO-8859-1")
+        while(l):
+            print("receving")
+            f.write(l)
+            l=s.recv(1024)
+        f.close()
+
+def get_file():
+    f=open("torecv.png",'wb')
+    try:
+        ss=s.recv(1024)
+        f.write(ss)
+        tv_get.insert(END,"\n")
+    except ValueError:
+        tv_get.insert(END,ss)
+        tv_get.insert(END,"\n")
+    except:
+        get()
+
+def use_get_file():
+    t=threading.Thread(target=get_file)
+    t.start()
 
 if __name__ == '__main__':
 
@@ -117,6 +145,7 @@ if __name__ == '__main__':
     Button(frm_l,text="save all the text",command=lambda :save()).pack(side=TOP)
     Button(frm_l,text="choose a file",command=lambda :sendfile()).pack(side=TOP)
     Button(frm_l,text="refresh",command=lambda :refresh(s)).pack(side=TOP)
+    Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
 
     tv_get=Text(frm_r)
     tv_get.insert(1.0,"<<<<")
@@ -144,8 +173,8 @@ if __name__ == '__main__':
     e_port.pack()
 
     # 新开一个线程监听新用户上线的消息消息
-    t = threading.Thread(target=get)
-    t.start()
+    # t = threading.Thread(target=get)
+    # t.start()
 
     root.mainloop()
 

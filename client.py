@@ -5,7 +5,7 @@
 
 import socket,threading
 import tkFileDialog
-import json
+import json,time
 from Tkinter import *
 import tkFont
 import base64
@@ -70,14 +70,15 @@ def print_item(event):
 
 def sendfile():
     # filename=tkFileDialog.askopenfilename()
-    f=open('tosend.png','rb')
-    l=f.read(256)
+    f=open('tosend.txt','rb')
+    l=f.read(2048)
     while (l):
         print("sending")
         addr=[e_ip.get(),e_port.get(),l.encode("base64")]
         ip_json=json.dumps(addr)
         s.send(ip_json)
-        l=f.read(256)
+        l=f.read(2048)
+        # time.sleep(2)
     f.close()
 
 def refresh(s):
@@ -93,15 +94,15 @@ def refresh(s):
         lb.insert(END,str(item[0])+'/'+str(item[1]))
 
 def get_file():
-    f=open("torecv.png",'ab')
+    f=open("torecv.txt",'ab')
     while True:
-        l=s.recv(1024)
+        l=s.recv(2048)
         while(l):
             print("receving")
             imgdata = base64.b64decode(l)
             f.write(imgdata)
-            l=s.recv(1024)
-        f.close()
+            l=s.recv(2048)
+    f.close()
 
 def get_file_0():
     f=open("torecv.png",'ab')

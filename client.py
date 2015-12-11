@@ -7,6 +7,7 @@ import socket,threading
 import tkFileDialog
 import json
 from Tkinter import *
+import tkFont
 
 def send(s,t):
     # get_before_send()#在发送之前先接受一下消息
@@ -117,6 +118,19 @@ def use_get_file():
     t=threading.Thread(target=get_file)
     t.start()
 
+def highlight():
+    tv_get.tag_add("start","1.8","1.13")
+    tv_get.tag_config("start",background="black",foreground="red")
+    # tv_get.highlight_pattern("<<<","red")
+
+def make_bold():
+    current_tags = tv_get.tag_names("sel.first")
+    if "bt" in current_tags:
+        tv_get.tag_remove("bt", "sel.first", "sel.last")
+    else:
+        tv_get.tag_add("bt", "sel.first", "sel.last")
+
+
 if __name__ == '__main__':
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -135,10 +149,14 @@ if __name__ == '__main__':
     frm_l=Frame(frm)
     frm_r=Frame(frm)
 
-    tv_send=Text(frm_r)
+    tv_send=Text(frm_r,font=("Georgia", "12"))
     tv_send.insert(1.0,"<<<<")
     tv_send.pack(side=TOP)
     t=tv_send.get(1.0,END)
+
+    tv_get=Text(frm_r,font=("Georgia", "12"))
+    tv_get.insert(1.0,"<<<<")
+    tv_get.pack(side=TOP)
 
     Button(frm_l,text="send",command=lambda :send(s,t)).pack(side=TOP)
     Button(frm_l,text="get",command=lambda :get_before_send()).pack(side=TOP)
@@ -146,10 +164,16 @@ if __name__ == '__main__':
     Button(frm_l,text="choose a file",command=lambda :sendfile()).pack(side=TOP)
     Button(frm_l,text="refresh",command=lambda :refresh(s)).pack(side=TOP)
     Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
+    Button(frm_l,text="hight",command=lambda :highlight()).pack(side=TOP)
+    Button(frm_l, text="bold", command=make_bold).pack(side=TOP)
+    # todo
+    bold_font = tkFont.Font(tv_get, tv_get.cget("font"))
+    bold_font.configure(weight="bold")
+    tv_get.tag_configure("bt", font=bold_font)
 
-    tv_get=Text(frm_r)
-    tv_get.insert(1.0,"<<<<")
-    tv_get.pack(side=TOP)
+    bold_font_send= tkFont.Font(tv_send, tv_send.cget("font"))
+    bold_font_send.configure(weight="bold")
+    tv_send.tag_configure("bt_send", font=bold_font_send)
 
     frm_l.pack(side=LEFT)
     frm_r.pack(side=RIGHT)

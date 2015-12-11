@@ -121,11 +121,6 @@ def use_get_file():
     t=threading.Thread(target=get_file)
     t.start()
 
-def highlight():
-    tv_get.tag_add("start","1.8","1.13")
-    tv_get.tag_config("start",background="black",foreground="red")
-    # tv_get.highlight_pattern("<<<","red")
-
 def make_bold():
     current_tags = tv_get.tag_names("sel.first")
     if "bt" in current_tags:
@@ -194,7 +189,6 @@ if __name__ == '__main__':
     Button(frm_l,text="choose a file",command=lambda :sendfile()).pack(side=TOP)
     Button(frm_l,text="refresh",command=lambda :refresh(s)).pack(side=TOP)
     Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
-    Button(frm_l,text="hight",command=lambda :highlight()).pack(side=TOP)
     Button(frm_l, text="bold", command=make_bold).pack(side=TOP)
 
     var3=StringVar()

@@ -8,6 +8,7 @@ import tkFileDialog
 import json
 from Tkinter import *
 import tkFont
+import base64
 
 def send(s,t):
     # get_before_send()#在发送之前先接受一下消息
@@ -70,11 +71,10 @@ def print_item(event):
 def sendfile():
     # filename=tkFileDialog.askopenfilename()
     f=open('tosend.png','rb')
-    l=f.read(512)
+    l=f.read(256)
     while (l):
         print("sending")
-        addr=[e_ip.get(),e_port.get(),l.decode("ISO-8859-1")]
-        # addr=[e_ip.get(),e_port.get(),l.decode('latin-1')]
+        addr=[e_ip.get(),e_port.get(),l.encode("base64")]
         ip_json=json.dumps(addr)
         s.send(ip_json)
         l=f.read(256)
@@ -92,21 +92,23 @@ def refresh(s):
         tv_get.insert(END,"\n")
         lb.insert(END,str(item[0])+'/'+str(item[1]))
 
-def get_file_0():
+def get_file():
     f=open("torecv.png",'ab')
     while True:
         l=s.recv(1024)
         while(l):
             print("receving")
-            f.write(l)
+            imgdata = base64.b64decode(l)
+            f.write(imgdata)
             l=s.recv(1024)
         f.close()
 
-def get_file():
+def get_file_0():
     f=open("torecv.png",'ab')
     try:
         ss=s.recv(1024)
-        f.write(ss)
+        imgdata = base64.b64decode(ss)
+        f.write(imgdata)
         tv_get.insert(END,"\n")
     except ValueError:
         tv_get.insert(END,ss)
@@ -166,7 +168,7 @@ if __name__ == '__main__':
     Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
     Button(frm_l,text="hight",command=lambda :highlight()).pack(side=TOP)
     Button(frm_l, text="bold", command=make_bold).pack(side=TOP)
-    # todo
+
     bold_font = tkFont.Font(tv_get, tv_get.cget("font"))
     bold_font.configure(weight="bold")
     tv_get.tag_configure("bt", font=bold_font)

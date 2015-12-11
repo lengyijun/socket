@@ -2,4 +2,7 @@
 
 from distutils.core import setup
 import py2exe
-setup(console=['client.py','server.py'])
+# setup(console=['client.pyw','server.pyw'],options={"py2exe":{"includes":["sip"]}})
+# setup(windows=['client.py','server.py'],options={"py2exe":{"includes":["sip"]}})
+# setup(windows=['__main__.py'], options={"py2exe":{"includes":["sip"]}})
+setup(windows=['client.py','server.py'])

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-# 写的极好，开一个echo_server可以监听多个client发送的信息
 'a server example which send hello to client.'
 
 import time, socket, threading

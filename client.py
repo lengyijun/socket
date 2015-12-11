@@ -16,15 +16,6 @@ def send(s,t):
     addr=[e_ip.get(),e_port.get(),t_conent]
     ip_json=json.dumps(addr)
     s.send(ip_json)
-    # try:
-    #     ss=s.recv(1024)
-    #     ss_json=json.loads(ss)
-    #     tv_get.insert(1.0,ss_json[0])
-    #     tv_get.insert("\n")
-    #     tv_get.insert(1.0,ss_json[1])
-    # except ValueError,e:
-    #     print "cannot decode <<<<<<<,"
-    #     tv_get.insert(1.0,ss)
 
 def get_before_send():
     try:
@@ -38,7 +29,7 @@ def get_before_send():
         tv_get.insert(END,ss)
         tv_get.insert(END,"\n")
     except:
-        print "no message now"
+        pass
 
 # 这个get虽然开了一个新的线程，但效果并不总是很好
 def get():
@@ -73,7 +64,7 @@ def sendfile():
     f=open(filename,'rb')
     l=f.read(2048)
     while (l):
-        print("sending")
+        # print("sending")
         addr=[e_ip.get(),e_port.get(),l.encode("base64")]
         ip_json=json.dumps(addr)
         s.send(ip_json)
@@ -98,7 +89,7 @@ def get_file():
     while True:
         l=s.recv(2048)
         while(l):
-            print("receving")
+            # print("receving")
             imgdata = base64.b64decode(l)
             f.write(imgdata)
             l=s.recv(2048)
@@ -139,19 +130,19 @@ def seach_text():
         mov=str("+"+length+"c")
         if not pos:
             break
-        print pos
+        # print pos
         tv_get.tag_add("start", pos,pos+mov)
         start=pos+mov
-    print "finish"
+    # print "finish"
     start=1.0
     while 1:
-        print "start"
+        # print "start"
         pos=tv_send.search(search_content,start,stopindex=END)
         length=str(len(search_content))
         mov=str("+"+length+"c")
         if not pos:
             break
-        print pos
+        # print pos
         tv_send.tag_add("start", pos,pos+mov)
         start=pos+mov
 
@@ -162,8 +153,8 @@ if __name__ == '__main__':
     # 建立连接:
     s.connect(('127.0.0.1', 9999))
     (addr, port) = s.getsockname()
-    print addr
-    print port
+    # print addr
+    # print port
 
     # 以下为图形化编程
     root=Tk()

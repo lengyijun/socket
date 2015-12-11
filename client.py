@@ -69,8 +69,8 @@ def print_item(event):
     var2.set(ss[1])
 
 def sendfile():
-    # filename=tkFileDialog.askopenfilename()
-    f=open('tosend.txt','rb')
+    filename=tkFileDialog.askopenfilename()
+    f=open(filename,'rb')
     l=f.read(2048)
     while (l):
         print("sending")
@@ -133,6 +133,33 @@ def make_bold():
     else:
         tv_get.tag_add("bt", "sel.first", "sel.last")
 
+def seach_text():
+    search_content=search_box.get()
+    start=1.0
+    tv_get.tag_config("start", background="black", foreground="yellow")
+    tv_send.tag_config("start", background="black", foreground="yellow")
+    while 1:
+        pos=tv_get.search(search_content,start,stopindex=END)
+        length=str(len(search_content))
+        mov=str("+"+length+"c")
+        if not pos:
+            break
+        print pos
+        tv_get.tag_add("start", pos,pos+mov)
+        start=pos+mov
+    print "finish"
+    start=1.0
+    while 1:
+        print "start"
+        pos=tv_send.search(search_content,start,stopindex=END)
+        length=str(len(search_content))
+        mov=str("+"+length+"c")
+        if not pos:
+            break
+        print pos
+        tv_send.tag_add("start", pos,pos+mov)
+        start=pos+mov
+
 
 if __name__ == '__main__':
 
@@ -169,6 +196,11 @@ if __name__ == '__main__':
     Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
     Button(frm_l,text="hight",command=lambda :highlight()).pack(side=TOP)
     Button(frm_l, text="bold", command=make_bold).pack(side=TOP)
+
+    var3=StringVar()
+    search_box=Entry(frm_l,textvariable=var3)
+    search_box.pack()
+    Button(frm_l, text="search", command=seach_text).pack(side=TOP)
 
     bold_font = tkFont.Font(tv_get, tv_get.cget("font"))
     bold_font.configure(weight="bold")

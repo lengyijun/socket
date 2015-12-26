@@ -28,3 +28,39 @@ Traceback (most recent call last):
   File "Tkinter.pyc", line 3104, in insert
 TclError: invalid command name ".36173704.36173864.36174664"
 
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "threading.pyc", line 810, in __bootstrap_inner
+  File "threading.pyc", line 763, in run
+  File "server.py", line 81, in tcplink
+  File "Tkinter.pyc", line 3104, in insert
+TclError: invalid command name ".36173704.36173864.36174664"
+
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "threading.pyc", line 810, in __bootstrap_inner
+  File "threading.pyc", line 763, in run
+  File "server.py", line 32, in opensocket
+error: [Errno 10053] 
+
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "threading.pyc", line 810, in __bootstrap_inner
+  File "threading.pyc", line 763, in run
+  File "server.py", line 55, in tcplink
+error: [Errno 10053] 
+
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "threading.pyc", line 810, in __bootstrap_inner
+  File "threading.pyc", line 763, in run
+  File "server.py", line 55, in tcplink
+error: [Errno 10054] 
+
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "threading.pyc", line 810, in __bootstrap_inner
+  File "threading.pyc", line 763, in run
+  File "server.py", line 32, in opensocket
+error: [Errno 10053] 
+

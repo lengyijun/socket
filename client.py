@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#!/usr/bin/python
 
 'a socket example which send echo message to server.'
 
@@ -95,19 +95,6 @@ def get_file():
             l=s.recv(2048)
     f.close()
 
-def get_file_0():
-    f=open("torecv.png",'ab')
-    try:
-        ss=s.recv(1024)
-        imgdata = base64.b64decode(ss)
-        f.write(imgdata)
-        tv_get.insert(END,"\n")
-    except ValueError:
-        tv_get.insert(END,ss)
-        tv_get.insert(END,"\n")
-    except:
-        get()
-
 def use_get_file():
     t=threading.Thread(target=get_file)
     t.start()
@@ -142,7 +129,6 @@ def seach_text():
         mov=str("+"+length+"c")
         if not pos:
             break
-        # print pos
         tv_send.tag_add("start", pos,pos+mov)
         start=pos+mov
 
@@ -153,39 +139,43 @@ if __name__ == '__main__':
     # 建立连接:
     s.connect(('127.0.0.1', 9999))
     (addr, port) = s.getsockname()
-    # print addr
-    # print port
 
     # 以下为图形化编程
     root=Tk()
     root.title(str(port)+" : "+str(addr))
-    root.geometry('200x200')
 
-    frm=Frame(root)
-    frm_l=Frame(frm)
-    frm_r=Frame(frm)
+    # image2 =Image.open('sjtu.gif')
+    # w = image2.width
+    # h = image2.height
+    # print(w)
+    # print(h)
+    root.geometry('%dx%d+0+0' % (750,500))
 
-    tv_send=Text(frm_r,font=("Georgia", "12"))
+    p=PhotoImage(file="sjtu.gif")
+
+    l=Label(root,image=p)
+
+    tv_send=Text(l,font=("Georgia", "12"),height=12,width=42)
     tv_send.insert(1.0,"<<<<")
-    tv_send.pack(side=TOP)
+    tv_send.place(x=20,y=20)
     t=tv_send.get(1.0,END)
 
-    tv_get=Text(frm_r,font=("Georgia", "12"))
+    tv_get=Text(l,font=("Georgia", "12"),height=10,width=42)
     tv_get.insert(1.0,"<<<<")
-    tv_get.pack(side=TOP)
+    tv_get.place(x=20,y=260)
 
-    Button(frm_l,text="send",command=lambda :send(s,t)).pack(side=TOP)
-    Button(frm_l,text="get",command=lambda :get_before_send()).pack(side=TOP)
-    Button(frm_l,text="save all the text",command=lambda :save()).pack(side=TOP)
-    Button(frm_l,text="choose a file",command=lambda :sendfile()).pack(side=TOP)
-    Button(frm_l,text="refresh",command=lambda :refresh(s)).pack(side=TOP)
-    Button(frm_l,text="getfile",command=lambda :use_get_file()).pack(side=TOP)
-    Button(frm_l, text="bold", command=make_bold).pack(side=TOP)
+    Button(l,text="send",width=19,command=lambda :send(s,t)).place(x=520,y=20)
+    Button(l,text="get",width=19,command=lambda :get_before_send()).place(x=520,y=50)
+    Button(l,text="save all the text",width=19,command=lambda :save()).place(x=520,y=80)
+    Button(l,text="choose a file",width=19,command=lambda :sendfile()).place(x=520,y=110)
+    Button(l,text="refresh",width=19,command=lambda :refresh(s)).place(x=520,y=140)
+    Button(l,text="getfile",width=19,command=lambda :use_get_file()).place(x=520,y=170)
+    Button(l,text="bold",width=19, command=make_bold).place(x=520,y=200)
 
     var3=StringVar()
-    search_box=Entry(frm_l,textvariable=var3)
-    search_box.pack()
-    Button(frm_l, text="search", command=seach_text).pack(side=TOP)
+    search_box=Entry(l,textvariable=var3)
+    search_box.place(x=520,y=240)
+    Button(l, text="search", width=19,command=seach_text).place(x=520,y=265)
 
     bold_font = tkFont.Font(tv_get, tv_get.cget("font"))
     bold_font.configure(weight="bold")
@@ -195,30 +185,26 @@ if __name__ == '__main__':
     bold_font_send.configure(weight="bold")
     tv_send.tag_configure("bt_send", font=bold_font_send)
 
-    frm_l.pack(side=LEFT)
-    frm_r.pack(side=RIGHT)
-    frm.pack()
 
     var=StringVar()
-    lb=Listbox(frm_l,height=5,selectmode=BROWSE,listvariable=var)
+    lb=Listbox(l,height=5,selectmode=BROWSE,listvariable=var)
     lb.bind('<ButtonRelease-1>',print_item)
 
-    scrl=Scrollbar(frm_l)
-    scrl.pack(side=RIGHT,fill=Y)
+    scrl=Scrollbar(lb)
+    scrl.place(x=600,y=295)
     lb.configure(yscrollcommand=scrl.set)
-    lb.pack(side=LEFT,fill=BOTH)
+    lb.place(x=520,y=295)
     scrl['command']=lb.yview
 
     var1=StringVar()
     var2=StringVar()
-    e_ip=Entry(frm_r,textvariable=var1)
-    e_port=Entry(frm_r,textvariable=var2)
-    e_ip.pack()
-    e_port.pack()
+    e_ip=Entry(l,textvariable=var1)
+    e_port=Entry(l,textvariable=var2)
+    e_ip.place(x=520,y=395)
+    e_port.place(x=520,y=410)
 
-    # 新开一个线程监听新用户上线的消息消息
-    # t = threading.Thread(target=get)
-    # t.start()
+    l.pack_propagate(0)
+    l.pack()
 
     root.mainloop()
 

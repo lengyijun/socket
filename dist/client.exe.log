@@ -2,3 +2,27 @@ Traceback (most recent call last):
   File "client.py", line 154, in <module>
   File "socket.pyc", line 228, in meth
 socket.error: [Errno 10061] 
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "Tkinter.pyc", line 1536, in __call__
+  File "client.py", line 181, in <lambda>
+  File "client.py", line 85, in refresh
+TypeError: 'int' object has no attribute '__getitem__'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "Tkinter.pyc", line 1536, in __call__
+  File "client.py", line 181, in <lambda>
+  File "client.py", line 85, in refresh
+TypeError: 'int' object has no attribute '__getitem__'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "Tkinter.pyc", line 1536, in __call__
+  File "client.py", line 180, in <lambda>
+  File "client.py", line 64, in sendfile
+IOError: [Errno 22] invalid mode ('rb') or filename: ''
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "Tkinter.pyc", line 1536, in __call__
+  File "client.py", line 180, in <lambda>
+  File "client.py", line 64, in sendfile
+IOError: [Errno 22] invalid mode ('rb') or filename: ''
